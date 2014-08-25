@@ -1,0 +1,58 @@
+<div class="row suggestion-list">
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 entry-card-wrapper" ng-repeat="s in suggestions">
+        <div class="user-image">
+          <img ng-src="http://swebtst01.public.jacobs-university.de/jPeople/image.php?id={{s.eid}}" alt="{{s.fullName}}" title="{{s.fullName}}" class="img-thumbnail">
+        </div>
+        <div class="user-info-block">
+          <div class="user-heading">
+            <h3>{{s.fullName}}</h3>
+            <span class="help-block">{{s.major}}</span>
+            <span ng-show="s.year" class="help-block">Class of 20{{s.year}}</span>
+            <span class="help-block" ng-show="s.country">
+            <img ng-hide="s.country === 'Stateless'" src="http://swebtst01.public.jacobs-university.de/jPeople/embed_assets/flags/{{s.country}}.png"><br>
+            {{s.country}}
+            </span>
+          </div>
+          <div class="user-body container-fluid">
+            <div class="row">
+              <div class="col-xs-6 college-field college-color-{{s.college || 'None'}}">
+                <p>
+                  College<br/><strong>{{s.college || 'None'}}</strong>
+                </p>
+              </div>
+              <div class="col-xs-6 room-field">
+                <p>
+                  Room<br/><strong>{{s.room || 'N/A'}}</strong>
+                </p>
+              </div>
+            </div>
+            <div class="row additional-entry" ng-show="s.phone">
+              <div class="col-xs-4 text-right">
+                <p>
+                  <strong>Phone</strong>
+                </p>
+              </div>
+              <div class="col-xs-8"><p><a href="tel:{{(s.phone.length > 4) ? s.phone : ('+49 421 200 '+s.phone)}}" target="_blank">{{(s.phone.length > 4) ? s.phone : ('+49 421 200 '+s.phone)}}</a></p></div>
+            </div>
+            <div class="row additional-entry" ng-show="s.email">
+              <div class="col-xs-4 text-right"><p><strong>Email</strong></p></div>
+              <div class="col-xs-8"><p><a href="mailto:{{s.email}}" target="_blank">{{s.email}}</a></p></div>
+            </div>
+            <div class="row additional-entry" ng-show="s.status">
+              <div class="col-xs-4 text-right"><p><strong>Status</strong></p></div>
+              <div class="col-xs-8"><p>{{s.status}}</p></div>
+            </div>
+            <div class="row user-view-bottom" ng-click="show(s)">
+              <div class="col-xs-12">
+                <p>
+                  View Full Contact
+                </p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
