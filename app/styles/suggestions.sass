@@ -11,6 +11,19 @@ body.centric
   padding: 8px
   position: relative
 
+  .user-favorite
+    position: absolute
+    right: 25px
+    top: 95px
+    z-index: 9999
+    .fa
+      &.fa-star
+        color: #ffd700
+      &.fa-star-o
+        color: #ffd700
+        &:not(.favorite)
+          color: #efefef
+
   .user-image
     position: relative
     z-index: 1

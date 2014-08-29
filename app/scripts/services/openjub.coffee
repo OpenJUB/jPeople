@@ -8,22 +8,28 @@
  # Service in the jpeopleApp.
 ###
 angular.module('jpeopleApp')
-  .factory 'OpenJUB', ($http, $cookieStore) ->
+  .factory 'OpenJUB', ($http, $rootScope, $cookieStore) ->
     # AngularJS will instantiate a singleton by calling "new" on this function
     _autocomplete =
       suggestions: []
       next: null
       prev: null
     _user = {}
+    _favorites = {}
     _loggedInUser = {}
     _authPopup = null
     _token = if ($cookieStore.get 'token') then $cookieStore.get 'token' else null
     _onCampus = if ($cookieStore.get 'onCampus') then true else false
     _loggedIn = if ($cookieStore.get 'loggedIn') then true else false
 
-    _clientId = 'foo'
+    _clientId = 'jpeople'
 
     _openjubUrl = "http://localhost:6969"
+
+    _buildFavoritesMap = (favs) =>
+      _favorites = {}
+      for f in favs
+        _favorites[f] = true
 
     _setToken = (token) =>
       _token = token
@@ -104,6 +110,7 @@ angular.module('jpeopleApp')
           fields: ''
         .success (res) =>
           _loggedInUser = res
+          _buildFavoritesMap res.favorites
 
       getMe: () =>
         _loggedInUser
@@ -126,6 +133,19 @@ angular.module('jpeopleApp')
 
       onCampus: () =>
         _onCampus
+
+      checkFavorite: (username) =>
+        check = if (_favorites[username]) then true else false
+
+      favorite: (action, user) =>
+        unless _loggedIn
+        requestUrl = _openjubUrl + '/user/me/favorite/' + action
+        $http.post requestUrl,
+          favorite: user
+        .success (res) =>
+          _buildFavoritesMap res.favorites
+        .error (err) =>
+          $rootScope.showError error
 
     _attachListeners()
     _checkOnCampus()

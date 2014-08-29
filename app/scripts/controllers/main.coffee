@@ -23,3 +23,12 @@ angular.module('jpeopleApp')
     
     $scope.show = (user) ->
       $location.path('/view/'+user.username)
+
+    $scope.checkFav = (user) ->
+      OpenJUB.checkFavorite user.username
+
+    $scope.toggleFav = (user) ->
+      if OpenJUB.checkFavorite user.username
+        OpenJUB.favorite 'remove', user.username
+      else
+        OpenJUB.favorite 'add', user.username
