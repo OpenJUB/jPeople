@@ -25,6 +25,7 @@ angular.module('jpeopleApp')
     _clientId = 'jpeople'
 
     _openjubUrl = "http://localhost:6969"
+    # _openjubUrl = "http://openjub.ngrok.com"
 
     _buildFavoritesMap = (favs) =>
       _favorites = {}
@@ -83,8 +84,24 @@ angular.module('jpeopleApp')
         $http.get requestUrl, 
           q: str,
           fields: ''
+          limit: 25
         .success (res) =>
+          console.log res
+          _autocomplete.next = res.next
+          _autocomplete.hasNext = if res.data.length < 25 then false else true
           _autocomplete.suggestions = res.data
+
+      autocompleteMore: () =>
+        return unless _autocomplete.next and _autocomplete.hasNext
+        $http.get _autocomplete.next,
+          fields: ''
+        .success (res) =>
+          _autocomplete.next = res.next
+          _autocomplete.hasNext = if res.data.length < 25 then false else true
+          _autocomplete.suggestions = _autocomplete.suggestions.concat res.data
+
+      hasMoreSuggestions: () =>
+        _autocomplete.hasNext
 
       getSuggestions: () =>
         _autocomplete.suggestions
@@ -138,7 +155,7 @@ angular.module('jpeopleApp')
         check = if (_favorites[username]) then true else false
 
       favorite: (action, user) =>
-        unless _loggedIn
+        return unless _loggedIn
         requestUrl = _openjubUrl + '/user/me/favorite/' + action
         $http.post requestUrl,
           favorite: user

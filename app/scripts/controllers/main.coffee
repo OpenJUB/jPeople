@@ -19,6 +19,7 @@ angular.module('jpeopleApp')
     , (suggestions) ->
       console.log 'sug', suggestions
       $scope.suggestions = suggestions
+      $scope.moreSuggestions = OpenJUB.hasMoreSuggestions()
 
     
     $scope.show = (user) ->
@@ -32,3 +33,6 @@ angular.module('jpeopleApp')
         OpenJUB.favorite 'remove', user.username
       else
         OpenJUB.favorite 'add', user.username
+
+    $scope.loadMore = () ->
+      OpenJUB.autocompleteMore()

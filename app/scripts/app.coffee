@@ -35,6 +35,8 @@ angular
       .when '/view/:username',
         templateUrl: '/views/view.html'
         controller: 'ViewCtrl'
+      .when '/favorites',
+        redirectTo: '/search/favorites'
       .otherwise
         redirectTo: '/'
         
@@ -55,6 +57,8 @@ angular
         $location.path '/'
         $rootScope.newPage = true
         $rootScope.showError 'Please log in or connect to VPN to be virtually on campus.'
+        $cookieStore.remove 'token'
+        $cookieStore.remove 'loggedIn'
         # remove any stale tokens
         expireTokenEvent = new Event 'JUB.tokenExpired'
         window.dispatchEvent expireTokenEvent

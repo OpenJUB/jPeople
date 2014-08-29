@@ -47,3 +47,6 @@ angular.module('jpeopleApp')
     $scope.logout = () ->
       OpenJUB.logout()
       $location.path '/'
+
+    $scope.showHelp = () ->
+      $location.path '/about'

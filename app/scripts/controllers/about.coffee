@@ -8,6 +8,8 @@
  # Controller of the jpeopleApp
 ###
 angular.module('jpeopleApp')
-  .controller 'AboutCtrl', ($scope, OpenJUB) ->
-    $scope.login = () =>
-      OpenJUB.login()
+  .controller 'AboutCtrl', ($scope, $rootScope, $location, OpenJUB) ->
+    $rootScope.newPage = false
+
+    $scope.example = (q) =>
+      $location.path('/search/'+q)

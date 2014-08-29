@@ -112,29 +112,20 @@ body {
 html {
   position: relative;
   min-height: 100%;
-  height: 100%;
 }
  
 body {
-  min-height: 100%;
-  height: 100%;
-  margin-bottom: 0px;
-  // margin-bottom: 7rem;
+  margin-bottom: 7rem;
 }
 
 div[role="main"] {
   padding-top: 70px;
   background: #efefef;
-  height: 100%;
 }
 
 body.centric {
   div[role="main"] {
     padding-top: 0px;
-    background: #fff
-  }
-  footer {
-    border-top: 0;
   }
 }
 

@@ -34,15 +34,18 @@
     <header ng-controller="HeaderCtrl">
       <div class="row large-logo">
         <div class="col-sm-6 col-sm-offset-3 text-center">
-          <h1 class="jPeople">jPeople</h1>
+          <a href="/"><h1 class="jPeople">jPeople</h1></a>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-2 text-right">
-          <h2 class="jPeople">jPeople</h1>
+          <a href="/"><h2 class="jPeople">jPeople</h2></a>
         </div>
         <div class="col-xs-8 col-sm-8">
-          <input type="text" id="jPeopleSearchbar" class="input input-lg col-xs-12" placeholder="Time To Stalk..." autofocus ng-change="updateResults()" ng-model="query" ui-keypress="{13:'pressedEnter()'}">
+          <div class="form-group has-feedback searchbar-feedback">
+            <input type="text" id="jPeopleSearchbar" class="input input-lg col-xs-12" placeholder="Time To Stalk..." autofocus ng-change="updateResults()" ng-model="query" ui-keypress="{13:'pressedEnter()'}">
+            <a href="javascript:void(0);" ng-click="showHelp()" class="form-control-feedback"><i class="fa fa-question fa-lg"></i></a>
+          </div>
         </div>
         <div class="col-xs-2 text-left loginAddon">
           <span ng-show="$root.onCampus"><i class="fa fa-university"></i> On Campus</span>
@@ -54,7 +57,7 @@
       <div class="row largeLoginAddon">
         <div class="col-sm-6 col-sm-offset-3 text-center">
           <span ng-show="$root.onCampus" class="lead"><i class="fa fa-university"></i> On Campus</span>
-          <span ng-show="$root.loggedIn && $root.me" class="largeUserImage"><img ng-src="http://localhost:6969/user/{{$root.me.username}}/image.jpg" class="img-thumbnail"/></span>
+          <a href="/me" ng-show="$root.loggedIn && $root.me" class="largeUserImage"><img ng-src="http://localhost:6969/user/{{$root.me.username}}/image.jpg" class="img-thumbnail"/></a>
           <br ng-show="$root.loggedIn && $root.me">
           <span ng-show="$root.loggedIn" ng-bind="$root.me.firstName" class="lead"></span>
           <br>

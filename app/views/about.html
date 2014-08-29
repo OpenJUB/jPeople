@@ -1,2 +1,53 @@
-<p>This is the about view.</p>
-<button type="button" class="btn btn-primary" ng-click="login()">Log In</button>
+<div class="row suggestion-list person-list">
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 person-view">
+    <div class="row">
+      <h2>Welcome to the new jPeople!</h2>
+      <hr>
+      <h4>What's new?</h4>
+      <p>
+        The new jPeople is the first release of a new application eco system at Jacobs called OpenJUB.
+        The aim of OpenJUB is to unite the efforts made by students on campus to create applications for
+        their fellow students. For this OpenJUB provides a central platform that is providing developers
+        the possibility to allow CampusNet authorization and access to the jPeople data.
+      </p>
+      <h4>How to use jPeople</h4>
+      <strong><i>Queries</i></strong>
+      <p>
+        You can query jPeople throught the search bar on top. When you enter a plain text it will try to match up with the full name of any registered person on campus. For this we use wildcards meaning that <code ng-click="example('Dom')">Dom</code> will match every name that has <code>dom</code> somewhere in the name. However you can also do more complex queries by asking for specific fields to have a certain value. Here some examples: 
+      </p>
+      <p>
+        <strong style="color:red">Note:</strong> You can click all of the examples to test them :)
+      </p>
+      <p>
+        <h5 ng-click="example('room:CA-1')">1) Find all students from College 3 A-Block First Floor:</h5>
+        <code ng-click="example('room:CA-1')">room:CA-1</code>
+      </p>
+      <p>
+        <h5 ng-click="example('country:Germany college:Krupp,Nordmetall')">2) Find all German students in Krupp and Nordmetall:</h5>
+        <code ng-click="example('country:Germany college:Krupp,Nordmetall')">country: Germany college:Krupp,Nordmetall</code>
+      </p>
+      <p>
+        <h5 ng-click="example('majorShort:BCCB,EECS year:15')">3) Find all BCCB and EECS majors of year '15</h5>
+        <code ng-click="example('majorShort:BCCB,EECS year:15')">majorShort:BCCB,EECS year:15</code>
+      </p>
+      <p>
+        When you press <kbd>Enter</kbd> it will update the URL and you can share the URL with your friends.
+      </p>
+      <p>
+        All fields that you can search for are: <br>
+        <code>firstName</code>,<code>lastName</code>,<code>major</code>,<code>majorShort</code>,<code>email</code>,<code>phone</code>,<code>room</code>,<code>college</code>,<code>country</code>,<code>year</code>,<code>status</code>,<code>username</code>
+      </p>
+      <strong><i>Favorites</i></strong>
+      <p>
+        As a new feature we allow you to favorite people that you frequently search for. This way you can easily access them by either entering <code>favorites</code> in the search box, navigate to: <a href="/favorites">/favorites</a> or by checking your profile at <a href="/me">/me</a>.
+      </p>
+      <h4>Where does the data come from?</h4>
+      <p>
+        The data we display comes from user directory at Jacobs. All data we use is accessible for all users at Jacobs. To adhere to data protection laws we provide this data to students only if they are on campus or logged in to prove that they are eligible to see the information.
+      </p>
+      <p>
+        <strong>Note:</strong> We only take the unfiltered data we get provided. Meaning we are not responsible for any data changes such as changing a phone number or a room. For these changes please contact the university administration (Registars, CampusNet dep, etc.).
+      </p>
+    </div>
+  </div>
+</div>
