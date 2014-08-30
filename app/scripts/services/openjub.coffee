@@ -24,7 +24,7 @@ angular.module('jpeopleApp')
 
     _clientId = 'jpeople'
 
-    _openjubUrl = "http://campus.jacobs-university-usg.de:6969"
+    _openjubUrl = "http://open.jacobs-cs.club"
     # _openjubUrl = "http://openjub.ngrok.com"
 
     _buildFavoritesMap = (favs) =>
