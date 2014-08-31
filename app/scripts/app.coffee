@@ -43,11 +43,11 @@ angular
     $locationProvider.html5Mode true
     $httpProvider.interceptors.push 'authInterceptor'
 
-  .factory 'authInterceptor', ($rootScope, $q, $cookieStore, $location) ->
+  .factory 'authInterceptor', ($rootScope, $q, $location) ->
     # Add authorization token to headers
     request: (config) ->
       config.headers = config.headers or {}
-      config.headers.Authorization = 'Bearer ' + $cookieStore.get 'token' if $cookieStore.get 'token'
+      config.headers.Authorization = 'Bearer ' + $.cookie 'token' if $.cookie 'token'
       config
 
     # Intercept 401s and redirect you to login
@@ -57,8 +57,8 @@ angular
         $location.path '/'
         $rootScope.newPage = true
         $rootScope.showError 'Please log in or connect to VPN to be virtually on campus.'
-        $cookieStore.remove 'token'
-        $cookieStore.remove 'loggedIn'
+        $.removeCookie 'token'
+        $.removeCookie 'loggedIn'
         # remove any stale tokens
         expireTokenEvent = new Event 'JUB.tokenExpired'
         window.dispatchEvent expireTokenEvent

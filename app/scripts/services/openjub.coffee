@@ -8,7 +8,7 @@
  # Service in the jpeopleApp.
 ###
 angular.module('jpeopleApp')
-  .factory 'OpenJUB', ($http, $rootScope, $cookieStore) ->
+  .factory 'OpenJUB', ($http, $rootScope) ->
     # AngularJS will instantiate a singleton by calling "new" on this function
     _autocomplete =
       suggestions: []
@@ -18,13 +18,14 @@ angular.module('jpeopleApp')
     _favorites = {}
     _loggedInUser = {}
     _authPopup = null
-    _token = if ($cookieStore.get 'token') then $cookieStore.get 'token' else null
-    _onCampus = if ($cookieStore.get 'onCampus') then true else false
-    _loggedIn = if ($cookieStore.get 'loggedIn') then true else false
+    _token = if ($.cookie 'token') then $.cookie 'token' else null
+    _onCampus = if ($.cookie 'onCampus') then true else false
+    _loggedIn = if ($.cookie 'loggedIn') then true else false
 
     _clientId = 'jpeople'
 
-    _openjubUrl = "http://open.jacobs-cs.club"
+    _plainOpenjubUrl = "open.jacobs-cs.club"
+    _openjubUrl = "http://" + _plainOpenjubUrl
     # _openjubUrl = "http://openjub.ngrok.com"
 
     _buildFavoritesMap = (favs) =>
@@ -34,7 +35,8 @@ angular.module('jpeopleApp')
 
     _setToken = (token) =>
       _token = token
-      $cookieStore.put 'token', token
+      $.cookie 'token', token, 
+        domain: '.jacobs-cs.club'
       console.log 'token', token
       return
 
@@ -42,9 +44,10 @@ angular.module('jpeopleApp')
       return unless e.origin is _openjubUrl
       data = JSON.parse e.data
       _setToken data.token if data?.token?
-      $cookieStore.put 'loggedIn', true
+      $.cookie 'loggedIn', true, 
+        domain: '.jacobs-cs.club'
       _loggedIn = true
-      $cookieStore.remove 'onCampus'
+      $.removeCookie 'onCampus'
       _onCampus = false
       _authPopup?.close()
       openjub.fetchMe()
@@ -56,21 +59,22 @@ angular.module('jpeopleApp')
       .success (res) =>
         unless _loggedIn
           _setToken res.token if res?.token?
-          $cookieStore.put 'onCampus', true
+          $.cookie 'onCampus', true, 
+            domain: '.jacobs-cs.club'
           _onCampus = true
       .error (res) =>
         if res.error is 'NotOnCampus'
-          $cookieStore.remove 'onCampus'
+          $.removeCookie 'onCampus'
           _onCampus = false
           unless _loggedIn
-            $cookieStore.remove 'token'
+            $.removeCookie 'token'
 
     _expiredToken = () =>
       _loggedIn = false
       _token = null
       _loggedInUser = {}
-      $cookieStore.remove 'token'
-      $cookieStore.remove 'loggedIn'
+      $.removeCookie 'token'
+      $.removeCookie 'loggedIn'
       _checkOnCampus()
 
     _attachListeners = () =>
@@ -143,8 +147,8 @@ angular.module('jpeopleApp')
         _loggedInUser = {}
         _loggedIn = false
         _token = null
-        $cookieStore.remove 'token'
-        $cookieStore.remove 'loggedIn'
+        $.removeCookie 'token'
+        $.removeCookie 'loggedIn'
         _checkOnCampus()
         return
 
