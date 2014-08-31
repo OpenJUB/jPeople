@@ -47,7 +47,8 @@ angular.module('jpeopleApp')
       $.cookie 'loggedIn', true, 
         domain: '.jacobs-cs.club'
       _loggedIn = true
-      $.removeCookie 'onCampus'
+      $.removeCookie 'onCampus',
+        domain: '.jacobs-cs.club'
       _onCampus = false
       _authPopup?.close()
       openjub.fetchMe()
@@ -64,17 +65,21 @@ angular.module('jpeopleApp')
           _onCampus = true
       .error (res) =>
         if res.error is 'NotOnCampus'
-          $.removeCookie 'onCampus'
+          $.removeCookie 'onCampus',
+            domain: '.jacobs-cs.club'
           _onCampus = false
           unless _loggedIn
-            $.removeCookie 'token'
+            $.removeCookie 'token',
+              domain: '.jacobs-cs.club'
 
     _expiredToken = () =>
       _loggedIn = false
       _token = null
       _loggedInUser = {}
-      $.removeCookie 'token'
-      $.removeCookie 'loggedIn'
+      $.removeCookie 'token',
+        domain: '.jacobs-cs.club'
+      $.removeCookie 'loggedIn',
+        domain: '.jacobs-cs.club'
       _checkOnCampus()
 
     _attachListeners = () =>
@@ -147,8 +152,10 @@ angular.module('jpeopleApp')
         _loggedInUser = {}
         _loggedIn = false
         _token = null
-        $.removeCookie 'token'
-        $.removeCookie 'loggedIn'
+        $.removeCookie 'token',
+          domain: '.jacobs-cs.club'
+        $.removeCookie 'loggedIn',
+          domain: '.jacobs-cs.club'
         _checkOnCampus()
         return
 

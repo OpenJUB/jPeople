@@ -31,8 +31,6 @@ angular.module('jpeopleApp')
     , (me) ->
       $rootScope.me = me
 
-    # OpenJUB.fetchMe()
-
     $scope.updateResults = () ->
       OpenJUB.autocomplete $scope.query unless $scope.query.length < 3
       if $scope.query.length < 3

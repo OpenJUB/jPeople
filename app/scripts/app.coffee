@@ -57,8 +57,10 @@ angular
         $location.path '/'
         $rootScope.newPage = true
         $rootScope.showError 'Please log in or connect to VPN to be virtually on campus.'
-        $.removeCookie 'token'
-        $.removeCookie 'loggedIn'
+        $.removeCookie 'token', 
+          domain: '.jacobs-cs.club'
+        $.removeCookie 'loggedIn',
+          domain: '.jacobs-cs.club'
         # remove any stale tokens
         expireTokenEvent = new Event 'JUB.tokenExpired'
         window.dispatchEvent expireTokenEvent
