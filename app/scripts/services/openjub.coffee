@@ -24,8 +24,8 @@ angular.module('jpeopleApp')
 
     _clientId = 'jpeople'
 
-    _plainOpenjubUrl = "open.jacobs-cs.club"
-    _openjubUrl = "http://" + _plainOpenjubUrl
+    _plainOpenjubUrl = "api.jacobs-cs.club"
+    _openjubUrl = "https://" + _plainOpenjubUrl
     # _openjubUrl = "http://openjub.ngrok.com"
 
     _buildFavoritesMap = (favs) =>
@@ -35,7 +35,7 @@ angular.module('jpeopleApp')
 
     _setToken = (token) =>
       _token = token
-      $.cookie 'token', token, 
+      $.cookie 'token', token,
         domain: '.jacobs-cs.club'
       console.log 'token', token
       return
@@ -44,7 +44,7 @@ angular.module('jpeopleApp')
       return unless e.origin is _openjubUrl
       data = JSON.parse e.data
       _setToken data.token if data?.token?
-      $.cookie 'loggedIn', true, 
+      $.cookie 'loggedIn', true,
         domain: '.jacobs-cs.club'
       _loggedIn = true
       $.removeCookie 'onCampus',
@@ -60,7 +60,7 @@ angular.module('jpeopleApp')
       .success (res) =>
         unless _loggedIn
           _setToken res.token if res?.token?
-          $.cookie 'onCampus', true, 
+          $.cookie 'onCampus', true,
             domain: '.jacobs-cs.club'
           _onCampus = true
       .error (res) =>
@@ -87,10 +87,10 @@ angular.module('jpeopleApp')
       window.addEventListener 'message', _handleMessage, false
       window.addEventListener 'JUB.tokenExired', _expiredToken, true
 
-    openjub = 
+    openjub =
       autocomplete: (str) =>
         requestUrl = _openjubUrl + '/user/autocomplete' + '?q=' + str
-        $http.get requestUrl, 
+        $http.get requestUrl,
           q: str,
           fields: ''
           limit: 25
