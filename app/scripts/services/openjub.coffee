@@ -26,7 +26,7 @@ angular.module('jpeopleApp')
 
     _plainOpenjubUrl = "api.jacobs-cs.club"
     _openjubUrl = "https://" + _plainOpenjubUrl
-    # _openjubUrl = "http://openjub.ngrok.com"
+    # _openjubUrl = "http://localhost:6969" # for developing
 
     _buildFavoritesMap = (favs) =>
       _favorites = {}
@@ -140,6 +140,9 @@ angular.module('jpeopleApp')
 
       getMe: () =>
         _loggedInUser
+
+      getUrl: () =>
+        _openjubUrl
 
       login: () =>
         _authPopup = window.open(_openjubUrl + '/login?response_type=token&redirect_uri=/auth/callback&client_id='+_clientId, '_blank', "width=500, height=400, resizeable=no, toolbar=no, scrollbar=no, location=no")
