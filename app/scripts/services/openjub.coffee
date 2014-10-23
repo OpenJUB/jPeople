@@ -31,6 +31,8 @@ angular.module('jpeopleApp')
     _cookieDomain = ".jacobs-cs.club"
     #_cookieDomain = "" # for developing
 
+    _minLength = 2 # minimum length of a query
+
     _buildFavoritesMap = (favs) =>
       _favorites = {}
       for f in favs
@@ -146,6 +148,9 @@ angular.module('jpeopleApp')
 
       getUrl: () =>
         _openjubUrl
+
+      minLength: () =>
+        _minLength
 
       login: () =>
         _authPopup = window.open(_openjubUrl + '/login?response_type=token&redirect_uri=/auth/callback&client_id='+_clientId, '_blank', "width=500, height=400, resizeable=no, toolbar=no, scrollbar=no, location=no")

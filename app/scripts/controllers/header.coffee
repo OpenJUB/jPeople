@@ -30,20 +30,20 @@ angular.module('jpeopleApp')
       OpenJUB.getMe()
     , (me) ->
       $rootScope.me = me
-    
+
     $scope.$watch ->
       OpenJUB.getUrl()
     , (url) ->
       $rootScope.url = url
 
     $scope.updateResults = () ->
-      OpenJUB.autocomplete $scope.query unless $scope.query.length < 3
-      if $scope.query.length < 3
+      OpenJUB.autocomplete $scope.query unless $scope.query.length < OpenJUB.minLength()
+      if $scope.query.length < OpenJUB.minLength()
         $location.path '/'
         OpenJUB.resetSuggestions()
 
     $scope.pressedEnter = () ->
-      $location.path '/search/'+$scope.query unless $scope.query.length < 3
+      $location.path '/search/'+$scope.query unless $scope.query.length < OpenJUB.minLength()
       return
 
     $scope.login = () ->
