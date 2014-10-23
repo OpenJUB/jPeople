@@ -9,7 +9,7 @@
 ###
 angular.module('jpeopleApp')
   .controller 'MainCtrl', ($scope, $routeParams, $location, OpenJUB) ->
-    
+
     if ($routeParams.query)
       $('#jPeopleSearchbar').val($routeParams.query)
       OpenJUB.autocomplete($routeParams.query)
@@ -20,8 +20,14 @@ angular.module('jpeopleApp')
       console.log 'sug', suggestions
       $scope.suggestions = suggestions
       $scope.moreSuggestions = OpenJUB.hasMoreSuggestions()
+    $scope.$watch ->
+      OpenJUB.getUrl()
+    , (url) ->
+      $scope.url = url
 
-    
+
+
+
     $scope.show = (user) ->
       $location.path('/view/'+user.username)
 

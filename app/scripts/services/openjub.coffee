@@ -26,7 +26,10 @@ angular.module('jpeopleApp')
 
     _plainOpenjubUrl = "api.jacobs-cs.club"
     _openjubUrl = "https://" + _plainOpenjubUrl
-    # _openjubUrl = "http://localhost:6969" # for developing
+    #_openjubUrl = "http://localhost:6969" # for developing
+
+    _cookieDomain = ".jacobs-cs.club"
+    #_cookieDomain = "" # for developing
 
     _buildFavoritesMap = (favs) =>
       _favorites = {}
@@ -36,7 +39,7 @@ angular.module('jpeopleApp')
     _setToken = (token) =>
       _token = token
       $.cookie 'token', token,
-        domain: '.jacobs-cs.club'
+        domain: _cookieDomain
       console.log 'token', token
       return
 
@@ -45,10 +48,10 @@ angular.module('jpeopleApp')
       data = JSON.parse e.data
       _setToken data.token if data?.token?
       $.cookie 'loggedIn', true,
-        domain: '.jacobs-cs.club'
+        domain: _cookieDomain
       _loggedIn = true
       $.removeCookie 'onCampus',
-        domain: '.jacobs-cs.club'
+        domain: _cookieDomain
       _onCampus = false
       _authPopup?.close()
       openjub.fetchMe()
@@ -61,25 +64,25 @@ angular.module('jpeopleApp')
         unless _loggedIn
           _setToken res.token if res?.token?
           $.cookie 'onCampus', true,
-            domain: '.jacobs-cs.club'
+            domain: _cookieDomain
           _onCampus = true
       .error (res) =>
         if res.error is 'NotOnCampus'
           $.removeCookie 'onCampus',
-            domain: '.jacobs-cs.club'
+            domain: _cookieDomain
           _onCampus = false
           unless _loggedIn
             $.removeCookie 'token',
-              domain: '.jacobs-cs.club'
+              domain: _cookieDomain
 
     _expiredToken = () =>
       _loggedIn = false
       _token = null
       _loggedInUser = {}
       $.removeCookie 'token',
-        domain: '.jacobs-cs.club'
+        domain: _cookieDomain
       $.removeCookie 'loggedIn',
-        domain: '.jacobs-cs.club'
+        domain: _cookieDomain
       _checkOnCampus()
 
     _attachListeners = () =>
@@ -156,9 +159,9 @@ angular.module('jpeopleApp')
         _loggedIn = false
         _token = null
         $.removeCookie 'token',
-          domain: '.jacobs-cs.club'
+          domain: _cookieDomain
         $.removeCookie 'loggedIn',
-          domain: '.jacobs-cs.club'
+          domain: _cookieDomain
         _checkOnCampus()
         return
 

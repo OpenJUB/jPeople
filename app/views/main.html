@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4 entry-card-wrapper" ng-repeat="s in suggestions">
         <div class="user-image">
-          <img ng-src="https://api.jacobs-cs.club/user/{{s.username}}/image.jpg" alt="{{s.fullName}}" title="{{s.fullName}}" class="img-thumbnail"  ng-mouseover="s.hover = true;" ng-mouseleave="s.hover = false;">
+          <img ng-src="{{$root.url}}/user/{{s.username}}/image.jpg" alt="{{s.fullName}}" title="{{s.fullName}}" class="img-thumbnail"  ng-mouseover="s.hover = true;" ng-mouseleave="s.hover = false;">
         </div>
         <div ng-show="$root.loggedIn" class="user-favorite" ng-mouseenter="s.hover = true;" ng-mouseleave="s.hover = false;" ng-click="toggleFav(s); s.hover = false;">
           <i class="fa fa-3x" ng-class="{'fa-star': (checkFav(s) || (!checkFav(s) && s.hover)), 'fa-star-o': (!checkFav(s) || (checkFav(s) && s.hover)), 'favorite': checkFav(s)}"></i>
@@ -14,7 +14,7 @@
             <span class="help-block">{{s.major}}</span>
             <span ng-show="s.year" class="help-block">Class of 20{{s.year}}</span>
             <span class="help-block" ng-show="s.country">
-            <img ng-hide="s.country === 'Stateless'" src="https://api.jacobs-cs.club/flag/{{s.country}}/image.png"><br>
+            <img ng-hide="s.country === 'Stateless'" src="{{$root.url}}/flag/{{s.country}}/image.png"><br>
             {{s.country}}
             </span>
           </div>
