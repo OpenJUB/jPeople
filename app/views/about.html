@@ -13,7 +13,11 @@
       <h4>How to use jPeople</h4>
       <strong><i>Queries</i></strong>
       <p>
-        You can query jPeople throught the search bar on top. When you enter a plain text it will try to match up with the full name of any registered person on campus. For this we use wildcards meaning that <code ng-click="example('Dom')">Dom</code> will match every name that has <code>dom</code> somewhere in the name. However you can also do more complex queries by asking for specific fields to have a certain value. Here some examples: 
+        You can query jPeople throught the search bar on top. When you enter a plain text it will try to match up with the full name of any registered person on campus. For this we use wildcards meaning that <code ng-click="example('Dom')">Dom</code> will match every name that has <code>dom</code> somewhere in the name. However you can also do more complex queries by asking for specific fields to have a certain value.
+
+        In general, the syntax is: <code>field:value</code> (also with a space, <code>field: value</code>). If you want to search for something which contains a space use: <code>field:'value with space'</code>. To match something exactly use double quotes: <code>field:"exact value"</code>. 
+
+        Here some examples:
       </p>
       <p>
         <strong style="color:red">Note:</strong> You can click all of the examples to test them :)
