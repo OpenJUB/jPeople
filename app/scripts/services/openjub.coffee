@@ -26,10 +26,10 @@ angular.module('jpeopleApp')
 
     _plainOpenjubUrl = "api.jacobs-cs.club"
     _openjubUrl = "https://" + _plainOpenjubUrl
-    #_openjubUrl = "http://localhost:6969" # for developing
+    _openjubUrl = "http://localhost:6969" # for developing
 
     _cookieDomain = ".jacobs-cs.club"
-    #_cookieDomain = "" # for developing
+    _cookieDomain = "" # for developing
 
     _minLength = 2 # minimum length of a query
 

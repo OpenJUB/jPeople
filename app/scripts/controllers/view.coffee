@@ -21,4 +21,7 @@ angular.module('jpeopleApp')
     , (user) ->
       $scope.user = user
 
-
+    $scope.$watch ->
+      OpenJUB.getUrl()
+    , (url) ->
+      $scope.url = url
