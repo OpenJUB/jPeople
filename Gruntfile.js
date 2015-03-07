@@ -35,14 +35,6 @@ module.exports = function (grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
-      coffee: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}'],
-        tasks: ['newer:coffee:dist']
-      },
-      coffeeTest: {
-        files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
-        tasks: ['newer:coffee:test', 'karma']
-      },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
@@ -77,7 +69,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect, options) {
             var middlewares = [];
- 
+
             middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
             middlewares.push(connect.static('.tmp'));
             middlewares.push(connect().use(
@@ -179,32 +171,6 @@ module.exports = function (grunt) {
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
-      }
-    },
-
-    // Compiles CoffeeScript to JavaScript
-    coffee: {
-      options: {
-        sourceMap: true,
-        sourceRoot: ''
-      },
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/scripts',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/scripts',
-          ext: '.js'
-        }]
-      },
-      test: {
-        files: [{
-          expand: true,
-          cwd: 'test/spec',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/spec',
-          ext: '.js'
-        }]
       }
     },
 
@@ -403,15 +369,12 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'coffee:dist',
         'compass:server'
       ],
       test: [
-        'coffee',
         'compass'
       ],
       dist: [
-        'coffee',
         'compass:dist',
         'imagemin',
         'svgmin'
@@ -421,7 +384,7 @@ module.exports = function (grunt) {
     // Test settings
     karma: {
       unit: {
-        configFile: 'test/karma.conf.coffee',
+        configFile: 'test/karma.conf.js',
         singleRun: true
       }
     }

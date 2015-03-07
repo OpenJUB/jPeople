@@ -5,9 +5,6 @@
         <div class="user-image">
           <img ng-src="{{$root.url}}/user/{{s.username}}/image.jpg" alt="{{s.fullName}}" title="{{s.fullName}}" class="img-thumbnail"  ng-mouseover="s.hover = true;" ng-mouseleave="s.hover = false;">
         </div>
-        <div ng-show="$root.loggedIn" class="user-favorite" ng-mouseenter="s.hover = true;" ng-mouseleave="s.hover = false;" ng-click="toggleFav(s); s.hover = false;">
-          <i class="fa fa-3x" ng-class="{'fa-star': (checkFav(s) || (!checkFav(s) && s.hover)), 'fa-star-o': (!checkFav(s) || (checkFav(s) && s.hover)), 'favorite': checkFav(s)}"></i>
-        </div>
         <div class="user-info-block">
           <div class="user-heading">
             <h3>{{s.fullName}}</h3>

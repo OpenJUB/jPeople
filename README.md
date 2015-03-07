@@ -10,4 +10,4 @@ bower install
 grunt serve
 ```
 
-If you are using localhost or other domains, do not forget to change app/scripts/services/openjub.coffee settings. 
+If you are using localhost or other domains, do not forget to change app/scripts/services/openjub.js settings. 
