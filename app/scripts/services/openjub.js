@@ -13,7 +13,7 @@
 
     //The OpenJUB Client.
     //You may adjust the url to the server here.
-    var client = new JUB.Client("http://localhost:6969");
+    var client = window.client = new JUB.Client("http://localhost:6969");
 
     //a bunch of status variables.
     var
@@ -28,7 +28,7 @@
       _userData,
 
       //Search Status
-      _currentResults,
+      _currentResults = [],
       _nextSearch;
 
     //minimum length for a query.
@@ -76,7 +76,7 @@
           _nextSearch(function(err, res){
             //append more results.
             _currentResults.push.apply(_currentResults, res.data);
-            
+
 
             //if we have enough, the page is full.
             //and there will be more.
@@ -241,12 +241,16 @@
     //and the parameter is true
     client.isOnCampus(function(error, data){
       _onCampus = !error && data.on_campus;
-    });
 
-    //and if we are logged in, fetch me also.
-    if (_loggedIn) {
-      openjub.fetchMe();
-    }
+      client.status(function(error, data){
+        if(data.user){
+          _loggedIn = true;
+          openjub.fetchMe(function(){
+            $("#login").click();
+          });
+        }
+      })
+    });
 
     //return openjub.
     return openjub;

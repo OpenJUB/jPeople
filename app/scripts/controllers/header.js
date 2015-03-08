@@ -53,13 +53,11 @@
     });
 
     $scope.updateResults = function() {
-      if (!($scope.query.length < OpenJUB.minLength())) {
+      if ($scope.query.length >= OpenJUB.minLength()) {
         OpenJUB.autocomplete($scope.query, function(){
           $scope.$apply();
         });
-      }
-
-      if ($scope.query.length < OpenJUB.minLength()) {
+      } else {
         $location.path('/');
         OpenJUB.resetSuggestions();
         $scope.$apply();
@@ -75,9 +73,13 @@
     };
 
     $scope.login = function() {
-      return OpenJUB.login(function(){
+      if(OpenJUB.loggedIn()){
         $scope.$apply();
-      });
+      } else {
+        return OpenJUB.login(function(){
+          $scope.$apply();
+        });
+      }
     };
 
     $scope.logout = function() {
