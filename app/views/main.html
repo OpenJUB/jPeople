@@ -11,7 +11,7 @@
             <span class="help-block">{{s.major}}</span>
             <span ng-show="s.year" class="help-block">Class of 20{{s.year}}</span>
             <span class="help-block" ng-show="s.country">
-            <img ng-hide="s.country === 'Stateless'" src="{{$root.url}}/flags/{{s.country.replace(' ', '_')}}.png"><br>
+            <img ng-hide="s.country === 'Stateless'" src="{{s.flag}}"><br>
             {{s.country}}
             </span>
           </div>

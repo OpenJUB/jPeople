@@ -15,7 +15,7 @@
             <strong>Nationality</strong>
           </div>
           <div class="col-xs-9">
-            <img ng-hide="user.country === 'Stateless'" src="{{url}}/flags/{{user.country.replace(' ', '_')}}.png">
+            <img ng-hide="user.country === 'Stateless'" src="{{s.flag}}">
             &nbsp; &nbsp;<span ng-bind="user.country"></span>
           </div>
         </div>

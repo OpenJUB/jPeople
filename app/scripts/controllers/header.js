@@ -52,7 +52,7 @@
       return $rootScope.url = url;
     });
 
-    $scope.updateResults = function() {
+    $scope.updateResults = _.throttle(function() {
       if ($scope.query.length >= OpenJUB.minLength()) {
         OpenJUB.autocomplete($scope.query, function(){
           $scope.$apply();
@@ -60,15 +60,12 @@
       } else {
         $location.path('/');
         OpenJUB.resetSuggestions();
-        $scope.$apply();
       }
-
-    };
+    }, 500);
 
     $scope.pressedEnter = function() {
       if (!($scope.query.length < OpenJUB.minLength())) {
         $location.path('/search/' + $scope.query);
-        $scope.$apply();
       }
     };
 
