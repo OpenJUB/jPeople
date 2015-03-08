@@ -12,6 +12,7 @@
   var randomizePlaceholder;
 
   angular.module('jpeopleApp', ['ngAnimate', 'ngCookies', 'ngResource', 'ngRoute', 'ngSanitize', 'ngTouch', 'ui.keypress']).config(function($routeProvider, $locationProvider, $httpProvider) {
+
     $routeProvider.when('/', {
       templateUrl: '/views/main.html',
       controller: 'MainCtrl'
@@ -32,38 +33,8 @@
     }).otherwise({
       redirectTo: '/'
     });
+
     $locationProvider.html5Mode(true);
-    return $httpProvider.interceptors.push('authInterceptor');
-  }).factory('authInterceptor', function($rootScope, $q, $location) {
-    return {
-      //Add authorization token to headers
-      request: function(config) {
-        config.headers = config.headers || {};
-        if ($.cookie('token')) {
-          config.headers.Authorization = 'Bearer ' + $.cookie('token');
-        }
-        return config;
-      },
-      //# Intercept 401s and redirect you to login
-      responseError: function(response) {
-        var expireTokenEvent, ref;
-        console.log('resp', response);
-        if (response.status === 401 && ((ref = response.data) != null ? ref.error : void 0) !== 'NotOnCampus') {
-          $location.path('/');
-          $rootScope.newPage = true;
-          $rootScope.showError('Please log in or connect to VPN to be virtually on campus.');
-          $.removeCookie('token', {
-            domain: '.jacobs-cs.club'
-          });
-          $.removeCookie('loggedIn', {
-            domain: '.jacobs-cs.club'
-          });
-          expireTokenEvent = new Event('JUB.tokenExpired');
-          window.dispatchEvent(expireTokenEvent);
-        }
-        return $q.reject(response);
-      }
-    };
   }).run(function($rootScope, $location) {
     $rootScope.globalAlert = {
       type: 'alert-info',

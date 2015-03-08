@@ -14,7 +14,9 @@
       $location.path('/');
     }
 
-    OpenJUB.fetchMe();
+    OpenJUB.fetchMe(function(){
+      $scope.$apply();
+    });
 
     $scope.user = {};
     $rootScope.newPage = false;

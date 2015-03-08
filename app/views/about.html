@@ -15,7 +15,7 @@
       <p>
         You can query jPeople throught the search bar on top. When you enter a plain text it will try to match up with the full name of any registered person on campus. For this we use wildcards meaning that <code ng-click="example('Dom')">Dom</code> will match every name that has <code>dom</code> somewhere in the name. However you can also do more complex queries by asking for specific fields to have a certain value.
 
-        In general, the syntax is: <code>field:value</code> (also with a space, <code>field: value</code>). If you want to search for something which contains a space use: <code>field:'value with space'</code>. To match something exactly use double quotes: <code>field:"exact value"</code>. 
+        In general, the syntax is: <code>field:value</code> (also with a space, <code>field: value</code>). If you want to search for something which contains a space use: <code>field:'value with space'</code>. To match something exactly use double quotes: <code>field:"exact value"</code>.
 
         Here some examples:
       </p>
@@ -41,16 +41,12 @@
         All fields that you can search for are: <br>
         <code>firstName</code>,<code>lastName</code>,<code>major</code>,<code>majorShort</code>,<code>email</code>,<code>phone</code>,<code>room</code>,<code>college</code>,<code>country</code>,<code>year</code>,<code>status</code>,<code>username</code>
       </p>
-      <strong><i>Favorites</i></strong>
-      <p>
-        As a new feature we allow you to favorite people that you frequently search for. This way you can easily access them by either entering <code>favorites</code> in the search box, navigate to: <a href="/favorites">/favorites</a> or by checking your profile at <a href="/me">/me</a>.
-      </p>
       <h4>Where does the data come from?</h4>
       <p>
         The data we display comes from user directory at Jacobs. All data we use is accessible for all users at Jacobs. To adhere to data protection laws we provide this data to students only if they are on campus or logged in to prove that they are eligible to see the information.
       </p>
       <p>
-        <strong>Note:</strong> We only take the unfiltered data we get provided. Meaning we are not responsible for any data changes such as changing a phone number or a room. For these changes please contact the university administration (Registars, CampusNet dep, etc.).
+        <strong>Note:</strong> We only take the unfiltered data we get provided. Meaning we are not responsible for any data changes such as changing a phone number or a room. For these changes please contact the university administration (Registars, CampusNet dep, etc.). 
       </p>
     </div>
   </div>

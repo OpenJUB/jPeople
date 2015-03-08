@@ -2,18 +2,15 @@
 (function() {
   'use strict';
 
-  /**
-    * @ngdoc function
-    * @name jpeopleApp.controller:AboutCtrl
-    * @description
-    * AboutCtrl
-    * Controller of the jpeopleApp
-   */
+  //shows the about page.
   angular.module('jpeopleApp').controller('AboutCtrl', function($scope, $rootScope, $location, OpenJUB) {
     $rootScope.newPage = false;
+
+    //allow to search the example.
     return $scope.example = (function(_this) {
       return function(q) {
-        return $location.path('/search/' + q);
+        $location.path('/search/' + q);
+        $scope.apply(); 
       };
     })(this);
   });

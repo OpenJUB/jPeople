@@ -12,27 +12,34 @@
   angular.module('jpeopleApp').controller('HeaderCtrl', function($scope, $rootScope, $location, OpenJUB) {
     $rootScope.newPage = true;
 
+    //watch for suggestions
+    //and add them to the page?
     $scope.$watch(function() {
       return OpenJUB.getSuggestions();
     }, function(suggestions) {
+
       if (suggestions.length > 0) {
         $rootScope.newPage = false;
       }
+
       return $scope.suggestions = suggestions;
     });
 
+    //watch for onCampus.
     $scope.$watch(function() {
       return OpenJUB.onCampus();
     }, function(onCampus) {
       return $rootScope.onCampus = onCampus;
     });
 
+    //check if we are loggedIn.
     $scope.$watch(function() {
       return OpenJUB.loggedIn();
     }, function(loggedIn) {
       return $rootScope.loggedIn = loggedIn;
     });
 
+    //check who I am
     $scope.$watch(function() {
       return OpenJUB.getMe();
     }, function(me) {
@@ -47,26 +54,36 @@
 
     $scope.updateResults = function() {
       if (!($scope.query.length < OpenJUB.minLength())) {
-        OpenJUB.autocomplete($scope.query);
+        OpenJUB.autocomplete($scope.query, function(){
+          $scope.$apply();
+        });
       }
+
       if ($scope.query.length < OpenJUB.minLength()) {
         $location.path('/');
-        return OpenJUB.resetSuggestions();
+        OpenJUB.resetSuggestions();
+        $scope.$apply();
       }
+
     };
 
     $scope.pressedEnter = function() {
       if (!($scope.query.length < OpenJUB.minLength())) {
         $location.path('/search/' + $scope.query);
+        $scope.$apply();
       }
     };
 
     $scope.login = function() {
-      return OpenJUB.login();
+      return OpenJUB.login(function(){
+        $scope.$apply();
+      });
     };
 
     $scope.logout = function() {
-      OpenJUB.logout();
+      OpenJUB.logout(function(){
+        $scope.$apply();
+      });
       return $location.path('/');
     };
 

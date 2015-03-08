@@ -2,30 +2,36 @@
 (function() {
   'use strict';
 
-  /**
-    * @ngdoc function
-    * @name jpeopleApp.controller:ViewCtrl
-    * @description
-    * # ViewCtrl
-    * Controller of the jpeopleApp
-   */
   angular.module('jpeopleApp').controller('ViewCtrl', function($scope, $routeParams, $location, $rootScope, OpenJUB) {
+    //if we did not give a user
+    //then go back to the root
     if (!$routeParams.username) {
       $location.path('/');
     }
-    OpenJUB.fetchUser($routeParams.username);
+
+    //we do not have a user or newpage yet.
     $scope.user = {};
     $rootScope.newPage = false;
+
+    //watch the current user.
     $scope.$watch(function() {
       return OpenJUB.getUser();
     }, function(user) {
       return $scope.user = user;
     });
-    return $scope.$watch(function() {
+
+    //watch the url.
+    $scope.$watch(function() {
       return OpenJUB.getUrl();
     }, function(url) {
       return $scope.url = url;
     });
+
+    //and get the new user.
+    OpenJUB.fetchUser($routeParams.username, function(){
+      $scope.$apply();
+    });
+
   });
 
 }).call(this);

@@ -15,26 +15,26 @@
       OpenJUB.autocomplete($routeParams.query);
     }
 
+    //watch for changes in the suggestions.
+    //this should trigger to re-draw the results page.
     $scope.$watch(function() {
       return OpenJUB.getSuggestions();
     }, function(suggestions) {
-      console.log('sug', suggestions);
       $scope.suggestions = suggestions;
-      return $scope.moreSuggestions = OpenJUB.hasMoreSuggestions();
-    });
-
-    $scope.$watch(function() {
-      return OpenJUB.getUrl();
-    }, function(url) {
-      return $scope.url = url;
+      $scope.moreSuggestions = OpenJUB.hasMoreSuggestions();
     });
 
     $scope.show = function(user) {
+      //navigate to the right user.
       return $location.path('/view/' + user.username);
     };
 
+    //when clicking the loadMore button, load more things.
     return $scope.loadMore = function() {
-      return OpenJUB.autocompleteMore();
+      return OpenJUB.autocompleteMore(function(){
+        //trigger an update.
+        $scope.$apply();
+      });
     };
   });
 

@@ -10,272 +10,245 @@
     * Service in the jpeopleApp.
    */
   angular.module('jpeopleApp').factory('OpenJUB', function($http, $rootScope) {
-    var _attachListeners, _authPopup, _autocomplete, _buildFavoritesMap, _checkOnCampus, _clientId, _cookieDomain, _expiredToken, _favorites, _handleMessage, _loggedIn, _loggedInUser, _minLength, _onCampus, _openjubUrl, _plainOpenjubUrl, _setToken, _token, _user, openjub;
-    _autocomplete = {
-      suggestions: [],
-      next: null,
-      prev: null
-    };
-    _user = {};
-    _favorites = {};
-    _loggedInUser = {};
-    _authPopup = null;
-    _token = $.cookie('token') ? $.cookie('token') : null;
-    _onCampus = $.cookie('onCampus') ? true : false;
-    _loggedIn = $.cookie('loggedIn') ? true : false;
-    _clientId = 'jpeople';
-    _plainOpenjubUrl = "api.jacobs-cs.club";
-    _openjubUrl = "https://" + _plainOpenjubUrl;
-    _cookieDomain = ".jacobs-cs.club";
-    _cookieDomain = "";
-    _minLength = 2;
-    _buildFavoritesMap = (function(_this) {
-      return function(favs) {
-        var f, i, len, results;
-        _favorites = {};
-        results = [];
-        for (i = 0, len = favs.length; i < len; i++) {
-          f = favs[i];
-          results.push(_favorites[f] = true);
-        }
-        return results;
-      };
-    })(this);
-    _setToken = (function(_this) {
-      return function(token) {
-        _token = token;
-        $.cookie('token', token, {
-          domain: _cookieDomain
-        });
-        console.log('token', token);
-      };
-    })(this);
-    _handleMessage = (function(_this) {
-      return function(e) {
-        var data;
-        if (e.origin !== _openjubUrl) {
-          return;
-        }
-        data = JSON.parse(e.data);
-        if ((data != null ? data.token : void 0) != null) {
-          _setToken(data.token);
-        }
-        $.cookie('loggedIn', true, {
-          domain: _cookieDomain
-        });
-        _loggedIn = true;
-        $.removeCookie('onCampus', {
-          domain: _cookieDomain
-        });
-        _onCampus = false;
-        if (_authPopup != null) {
-          _authPopup.close();
-        }
-        return openjub.fetchMe();
-      };
-    })(this);
-    _checkOnCampus = (function(_this) {
-      return function() {
-        var requestUrl;
-        requestUrl = _openjubUrl + '/auth/oncampus?client_id=' + _clientId;
-        return $http.get(requestUrl, {
-          fields: ''
-        }).success(function(res) {
-          if (!_loggedIn) {
-            if ((res != null ? res.token : void 0) != null) {
-              _setToken(res.token);
-            }
-            $.cookie('onCampus', true, {
-              domain: _cookieDomain
-            });
-            return _onCampus = true;
-          }
-        }).error(function(res) {
-          if (res.error === 'NotOnCampus') {
-            $.removeCookie('onCampus', {
-              domain: _cookieDomain
-            });
-            _onCampus = false;
-            if (!_loggedIn) {
-              return $.removeCookie('token', {
-                domain: _cookieDomain
-              });
-            }
-          }
-        });
-      };
-    })(this);
-    _expiredToken = (function(_this) {
-      return function() {
-        _loggedIn = false;
-        _token = null;
-        _loggedInUser = {};
-        $.removeCookie('token', {
-          domain: _cookieDomain
-        });
-        $.removeCookie('loggedIn', {
-          domain: _cookieDomain
-        });
-        return _checkOnCampus();
-      };
-    })(this);
-    _attachListeners = (function(_this) {
-      return function() {
-        console.log('attach');
-        window.addEventListener('message', _handleMessage, false);
-        return window.addEventListener('JUB.tokenExired', _expiredToken, true);
-      };
-    })(this);
-    openjub = {
+
+    //The OpenJUB Client.
+    //You may adjust the url to the server here.
+    var client = new JUB.Client("http://localhost:6969");
+
+    //a bunch of status variables.
+    var
+      //My Status
+      _onCampus, // is the user on campus.
+      _loggedIn, //are we logged in?
+      _myName, //currently logged in user.
+      _myData, //my current data
+
+      //User Status
+      _userName,
+      _userData,
+
+      //Search Status
+      _currentResults,
+      _nextSearch;
+
+    //minimum length for a query.
+    var _minLength = 2;
+
+
+     var openjub = {
+
+      //==============
+      //Main Search functionality.
+      //==============
       autocomplete: (function(_this) {
-        return function(str) {
-          var requestUrl;
-          requestUrl = _openjubUrl + '/user/autocomplete' + '?q=' + str;
-          return $http.get(requestUrl, {
-            q: str,
-            fields: '',
-            limit: 25
-          }).success(function(res) {
-            console.log(res);
-            _autocomplete.next = res.next;
-            _autocomplete.hasNext = res.data.length < 25 ? false : true;
-            return _autocomplete.suggestions = res.data;
+        return function(str, callback) {
+          //Search for a results.
+          client.search(str, [], function(err, res){
+
+            //set the results.
+            _currentResults = res.data;
+
+            //if we have enough, the page is full.
+            //and there will be more.
+            if(res.data.length === 25){
+              //the next search result.
+              _nextSearch = res.next.bind(res);
+            } else {
+              //no more results.
+              _nextSearch = undefined;
+            }
+
+            //call the callback.
+            if(typeof callback === 'function'){
+              callback();
+            }
           });
         };
       })(this),
       autocompleteMore: (function(_this) {
-        return function() {
-          if (!(_autocomplete.next && _autocomplete.hasNext)) {
+        return function(callback){
+
+          //if we do not have any more suggestions, just return.
+          if(!openjub || !openjub.hasMoreSuggestions()){
             return;
           }
-          return $http.get(_autocomplete.next, {
-            fields: ''
-          }).success(function(res) {
-            _autocomplete.next = res.next;
-            _autocomplete.hasNext = res.data.length < 25 ? false : true;
-            return _autocomplete.suggestions = _autocomplete.suggestions.concat(res.data);
+
+          _nextSearch(function(err, res){
+            //append more results.
+            _currentResults.push.apply(_currentResults, res.data);
+            
+
+            //if we have enough, the page is full.
+            //and there will be more.
+            if(res.data.length === 25){
+              //the next search result.
+              _nextSearch = res.next.bind(res);
+            } else {
+              //no more results.
+              _nextSearch = undefined;
+            }
+
+            //call the callback.
+            if(typeof callback === 'function'){
+              callback();
+            }
           });
-        };
+        }
       })(this),
       hasMoreSuggestions: (function(_this) {
-        return function() {
-          return _autocomplete.hasNext;
-        };
+        return function(){
+          //check if we have more things to show.
+          return (typeof _nextSearch === 'function');
+        }
       })(this),
       getSuggestions: (function(_this) {
+        //get the current suggestions.
         return function() {
-          return _autocomplete.suggestions;
+          return _currentResults;
         };
       })(this),
       resetSuggestions: (function(_this) {
+        //reset the suggestions
         return function() {
-          return _autocomplete.suggestions = [];
+          _currentResults = [];
+          _nextSearch = undefined;
         };
       })(this),
+
+      //==============
+      //Fetch a specific user.
+      //==============
       fetchUser: (function(_this) {
-        return function(username) {
-          var requestUrl;
-          requestUrl = _openjubUrl + '/user/' + username;
-          return $http.get(requestUrl, {
-            fields: ''
-          }).success(function(res) {
-            console.log('??');
-            return _user = res;
-          });
+        return function(username, callback) {
+          //fetch data about some user.
+          _userName = username;
+          client.getUserByName(_userName, [], function(error, data){
+            _userData = data;
+
+            if(!error){
+              _userData = data;
+              //call the callback.
+              if(typeof callback === 'function'){
+                callback();
+              }
+            }
+          })
         };
       })(this),
       getUser: (function(_this) {
+        //get the current user data.
         return function() {
-          return _user;
+          return _userData;
         };
       })(this),
+
+      //==============
+      //Fetch me
+      //==============
       fetchMe: (function(_this) {
-        return function() {
-          var requestUrl;
-          if (_token === null || _onCampus) {
-            return;
+        return function(callback) {
+          //get my name
+          _myName = client.user;
+          if(_myName){
+            client.getMe([], function(error, data){
+
+              if(!error){
+                _myData = data;
+
+                //call the callback.
+                if(typeof callback === 'function'){
+                  callback();
+                }
+              } else {
+                //else logout again.
+                //because we do not have user data.
+                openjub.logout();
+              }
+            });
+          } else {
+            //we did not have a user name.
+            //so logout.
+            openjub.logout();
           }
-          requestUrl = _openjubUrl + '/user/me';
-          return $http.get(requestUrl, {
-            fields: ''
-          }).success(function(res) {
-            _loggedInUser = res;
-            return _buildFavoritesMap(res.favorites);
-          });
         };
       })(this),
       getMe: (function(_this) {
         return function() {
-          return _loggedInUser;
+          //return my Data
+          return _myData;
         };
       })(this),
+
+      //==============
+      //OpenJUB URL
+      //==============
       getUrl: (function(_this) {
+        //returns the url of OpenJUB.
         return function() {
-          return _openjubUrl;
+          return client.server;
         };
       })(this),
-      minLength: (function(_this) {
-        return function() {
-          return _minLength;
-        };
-      })(this),
+
+      //==============
+      //Authentication.
+      //==============
       login: (function(_this) {
-        return function() {
-          _authPopup = window.open(_openjubUrl + '/login?response_type=token&redirect_uri=/auth/callback&client_id=' + _clientId, '_blank', "width=500, height=400, resizeable=no, toolbar=no, scrollbar=no, location=no");
+        return function(callback) {
+          //login using the popup
+          client.authenticate(function(){
+            _loggedIn = true;
+            //and fetch the current user afterwards.
+            openjub.fetchMe(callback);
+          });
         };
       })(this),
       loggedIn: (function(_this) {
+        //we are logged in.
         return function() {
           return _loggedIn;
         };
       })(this),
       logout: (function(_this) {
-        return function() {
-          _loggedInUser = {};
-          _loggedIn = false;
-          _token = null;
-          $.removeCookie('token', {
-            domain: _cookieDomain
+        //signout and clean up.
+        return function(callback) {
+          client.signout(function(){
+            _myName = undefined;
+            _myData = undefined;
+            _loggedIn = false;
+
+            if(typeof callback === 'function'){
+              callback();
+            }
           });
-          $.removeCookie('loggedIn', {
-            domain: _cookieDomain
-          });
-          _checkOnCampus();
         };
       })(this),
       onCampus: (function(_this) {
+        //check if we are on campus.
         return function() {
           return _onCampus;
         };
       })(this),
-      checkFavorite: (function(_this) {
-        return function(username) {
-          var check;
-          return check = _favorites[username] ? true : false;
+
+      minLength: (function(_this) {
+        //return the minimum query length.
+        return function() {
+          return _minLength;
         };
       })(this),
-      favorite: (function(_this) {
-        return function(action, user) {
-          var requestUrl;
-          if (!_loggedIn) {
-            return;
-          }
-          requestUrl = _openjubUrl + '/user/me/favorite/' + action;
-          return $http.post(requestUrl, {
-            favorite: user
-          }).success(function(res) {
-            return _buildFavoritesMap(res.favorites);
-          }).error(function(err) {
-            return $rootScope.showError(error);
-          });
-        };
-      })(this)
     };
-    _attachListeners();
-    _checkOnCampus();
+
+    //we are on Campus if there is no error
+    //and the parameter is true
+    client.isOnCampus(function(error, data){
+      _onCampus = !error && data.on_campus;
+    });
+
+    //and if we are logged in, fetch me also.
     if (_loggedIn) {
       openjub.fetchMe();
     }
+
+    //return openjub.
     return openjub;
   });
 
