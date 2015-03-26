@@ -78,7 +78,7 @@
 
   randomizePlaceholder = function() {
     var index, values;
-    values = ['Time To Stalk', 'Who\'s that chick?', 'Who\'s that dude?', 'I don\'t know you!', '#stalk'];
+    values = ['I don\'t know you!'];
     index = Math.floor(Math.random() * values.length);
     $('#jPeopleSearchbar').attr('placeholder', values[index]);
   };
