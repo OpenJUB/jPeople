@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4 entry-card-wrapper" ng-repeat="s in suggestions">
         <div class="user-image">
-          <img ng-src="{{$root.url}}/user/image/{{s.username}}/image.jpg" alt="{{s.fullName}}" title="{{s.fullName}}" class="img-thumbnail"  ng-mouseover="s.hover = true;" ng-mouseleave="s.hover = false;">
+          <img ng-src="{{s.picture}}" alt="{{s.fullName}}" title="{{s.fullName}}" class="img-thumbnail"  ng-mouseover="s.hover = true;" ng-mouseleave="s.hover = false;">
         </div>
         <div class="user-info-block">
           <div class="user-heading">
