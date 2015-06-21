@@ -59,14 +59,6 @@
             <span ng-bind="s.room || 'N/A'"></span>
           </div>
         </div>
-        <div class="row" ng-show="user.favorites">
-          <div class="col-xs-3 text-right">
-            <strong>Favorites</strong>
-          </div>
-          <div class="col-xs-9 well">
-            <a ng-href="/view/{{f}}" ng-repeat="f in user.favorites"><img ng-src="{{url}}/user/{{f}}/image.jpg" class="img-thumbnail"/></a>
-          </div>
-        </div>
       </div>
     </div>
   </div>
